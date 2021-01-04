@@ -5,7 +5,6 @@ package edu.uoc.pac4.data.user
  */
 
 class TwitchUserRepository(
-    // TODO: Add any datasources you may need
 ) : UserRepository {
 
     override suspend fun getUser(): User? {
