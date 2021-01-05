@@ -5,7 +5,7 @@
 #### MVVM
 
 ##### ¿En qué consiste esta arquitectura?
-Model-View-ViewModel es un patrón de arquitectura que porucre separar y distinguir los roles de cada capa de manera clara. Hay 3 capas:
+Model-View-ViewModel es un patrón de arquitectura que porcura separar y distinguir los roles de cada capa de manera clara. Hay 3 capas:
 - View: Las vistas muestran la interfaz y informa a las otras capas sobre las acciones de los usuarios.
 - ViewModel: Expone la información a la vista.
 - Model: recibe la información del datasource y la expone a los ViewModels.
@@ -20,24 +20,37 @@ El principal inconveniente de este patrón es que puede ser muy complejo para ap
 #### MVP
 
 ##### ¿En qué consiste esta arquitectura?
-Escribe tu respuesta aquí
+Model-View-Presenter es un patrón de arquitectura que permite mejorar la separación de tareas y los tests unitarios. Consiste en tres capas:
+- Model: Es la capa de datos, responsable para la lógica de negocio. Recibiendo, guardando y cambiando los datos.
+- View: Muestra la interefaz y escucha las acciones de los usuarios. Oculta o muestra las vistas i trata la navegación de las pantallas. En Android extiende de Activity o Fragment.
+- Presenter: Interacciona tanto con el Modelo y la Vista, y trata la lógica de presentación. Es la clase que une el Modelo y las Vistas.
+
+Si además se hace uso de Interfaces para el Presenter y las View, se evita el acoplamiento entre el Presenter y la View, haciendo que el Presenter trate con la ViewInterface en vez de directamente la Activity.
 
 ##### ¿Cuáles son sus ventajas?
-Escribe tu respuesta aquí
+Esta arquitectura permire una buena separación de capas y permite realizar tests-unitarios para la capa de Model y Presenter.
+
 
 ##### ¿Qué inconvenientes tiene?
-Escribe aquí tu respuesta
+Hay que tener en cuenta lo que pasa con el Presenter una vez se destruye la Activity. Ya que si no se trata, puede causar errores si se hace referencia a la Activity destuida. I en el caso de destruir el Presenter junto a la Activity, hay que tener en cuenta que no haya referencias al Presenter en otra clase que siga activa en memoria.
+
 
 #### MVI
 
 ##### ¿En qué consiste esta arquitectura?
-Escribe tu respuesta aquí
+Model-View-Intent es un nuevo patrón de arquitectura para Android. Los roles de los componentes de esta arquitectura són los siguientes:
+- Model: Representa un estado. Los modelos deben ser inmutables para asegurar una direccionalidad del flujo de datos entre ellos y las otras capas de la arquitectura.
+- Intent: Representa una intención o deseo de realizar una acción por el usuario. Para cada acción de un usuario, un Intent será recibido por la View, el Presenter lo observará y se traducirá a un nuevo estado del Model.
+- View: Són representados por las Interfaces como en el patrón MVP. Se implementa con Activities o Fragments.
 
 ##### ¿Cuáles son sus ventajas?
-Escribe tu respuesta aquí
+Una de las principales ventajas es unidireccionalidad y un flujo cíclico de los datos de la aplicación.
+Otra ventaja es que proporciona un estado consistente durante el ciclo de vida de las vistas.
+Por último, la inmutabilidad de los Modelos proporciona un comportamento seguro en aplicaciones grandes.
+
 
 ##### ¿Qué inconvenientes tiene?
-Escribe aquí tu respuesta
+El mayor y seguramente el único inconveniente del patrón MVI es la curva de aprendizaje de este patrón, ya que és más grande debido a la necesidad de conocimiento de programación reactiva, multi-threading...
 
 ---
 
