@@ -57,10 +57,15 @@ El mayor y seguramente el único inconveniente del patrón MVI es la curva de ap
 ### Testing
 
 #### ¿Qué tipo de tests se deberían incluir en cada parte de la pirámide de test? Pon ejemplos de librerías de testing para cada una de las partes. 
-Escribe aquí tu respuesta
+Los principales tests que se deberían incluir en un aplicación són:
+1. Tests unitarios: Forman parte de la base de la pirámide. Són pruebas a nivel más inferior de la aplicación que validan el comportamiento de un elemento en concreto de la app, predefiniendo las dependencias previamente para que no afecten al comportamiento de los tests. Estos tests se ejecutan independientemente del emulador o del dispositivo físico. Las herramientas más usadas para estos tests són JUnit y Mockito.
+1. Pruebas de intregración: Situadas en el centro de la pirámide. Són pruebas a nivel medio que permiten testear como interactuan diferentes partes de la aplicación que tienen relación entre ellas. Se realizan una vez se han pasado todos los tests unitarios. La herramienta más común para los tests de integración és Roboelectric, que permite ejecutar los tests en un entorno de pruebas.
+1. Pruebas de interfície de usuario (end to end): Situadas en la parte superior de la pirámide. Són los tests largos pero que menos cantidad hay. Són pruebas que validan toda una funcionalidad que realizaria un usuario en un uso de real de la aplicación. Se realizan en un emulador o en un dispositivo físico. Las herramientas más comunes són Expresso y UI Automator.
+
+La cantidad de pruebas suele variar en los casos prácticos, pero lo recomendable és realizar un 70% de pruebas unitarias, 20% de pruebas de integración y 10% de pruebas end to end.
 
 #### ¿Por qué los desarrolladores deben centrarse sobre todo en los Unido Tests?
-Escribe aquí tu respuesta
+Són los tests más rápidos y menos costosos de realizar, no necesitan un emulador ni un dispositivo físico para ejecutarse. Además, se centran en un solo componente de la aplicación y no tiene dependencias de interacciones con otros elementos, lo que hace más fácil resolver cualquien error que se encuentre en los tests.
 
 ---
 
