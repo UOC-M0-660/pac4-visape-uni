@@ -72,7 +72,7 @@ Són los tests más rápidos y menos costosos de realizar, no necesitan un emula
 ### Inyección de dependencias
 
 #### Explica en qué consiste y por qué nos ayuda a mejorar nuestro código.
-Escribe aquí tu respuesta
+La inyección de dependencias consiste passar desde una fuente exterior lo objetos de los que depende otro objeto, en vez de crear el objeto en la clase directamente. La inyección de dependencias permite asegurar la reusabilidad de las clases, ya que permite crear dos instancias de la misma clase pero que tengan diferentes objetos de manera sencilla. Además, facilita la realización de tests unitarios que solo testean una clase en concreto sin tener que depender de las otras, haciendo uso de "Mock objects".
 
 #### Explica cómo se hace para aplicar inyección de dependencias de forma manual a un proyecto (sin utilizar librerías externas).
-Escribe aquí tu respuesta
+Para aplicar inyección de dependencias de forma manual, cuando se programa una clase en vez de crear un bloque init() donde se inicializan los objectos, se deberian passar dichos objectos en el constructor como parámetros.
