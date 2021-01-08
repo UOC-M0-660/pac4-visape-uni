@@ -8,6 +8,7 @@ import edu.uoc.pac4.R
 import edu.uoc.pac4.ui.login.LoginActivity
 import edu.uoc.pac4.data.SessionManager
 import edu.uoc.pac4.ui.streams.StreamsActivity
+import org.koin.android.ext.android.get
 
 class LaunchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,13 +18,11 @@ class LaunchActivity : AppCompatActivity() {
     }
 
     private fun checkUserSession() {
-        Log.d("TEEEEST", "CHECK USER")
-        if (SessionManager(this).isUserAvailable()) {
-            Log.d("TEEEEST", "USER AV")
+        val sessionManager: SessionManager = get()
+        if (sessionManager.isUserAvailable()) {
             // User is available, open Streams Activity
             startActivity(Intent(this, StreamsActivity::class.java))
         } else {
-            Log.d("TEEEEST", "USER UNAV")
             // User not available, request Login
             startActivity(Intent(this, LoginActivity::class.java))
         }
