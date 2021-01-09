@@ -20,7 +20,7 @@ class OAuthAuthenticationRepository(
     private val sessionManager: SessionManager
 ) : AuthenticationRepository {
 
-    private val TAG = "OAuthAuthenticationRepository"
+    private val TAG = "OAuthAuthenticationRepo"
 
     override suspend fun isUserAvailable(): Boolean {
         return sessionManager.isUserAvailable()
@@ -44,5 +44,9 @@ class OAuthAuthenticationRepository(
     override suspend fun logout() {
         sessionManager.clearAccessToken()
         sessionManager.clearRefreshToken()
+    }
+
+    override suspend fun clearAccessToken() {
+        sessionManager.clearAccessToken()
     }
 }

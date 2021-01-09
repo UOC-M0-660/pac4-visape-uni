@@ -9,44 +9,42 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import edu.uoc.pac4.R
-import edu.uoc.pac4.data.network.Network
 import edu.uoc.pac4.ui.login.LoginActivity
-import edu.uoc.pac4.data.SessionManager
 import edu.uoc.pac4.data.network.UnauthorizedException
-import edu.uoc.pac4.data.oauth.OAuthAuthenticationRepository
 import edu.uoc.pac4.data.user.User
-import edu.uoc.pac4.data.user.UserRepository
 import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.coroutines.launch
-import org.koin.android.ext.android.get
-import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class ProfileActivity : AppCompatActivity() {
 
     private val TAG = "ProfileActivity"
 
-    private val userRepository : UserRepository by inject()
+    private val viewModel : ProfileViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+
+        viewModel.user.observe(this, Observer {
+            setUserInfo(it)
+
+            // Hide Loading
+            progressBar.visibility = GONE
+        })
+
         // Get User Profile
-        lifecycleScope.launch {
-            getUserProfile()
-        }
+        getUserProfile()
         // Update Description Button Listener
         updateDescriptionButton.setOnClickListener {
             // Hide Keyboard
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             imm?.hideSoftInputFromWindow(it.windowToken, 0)
             // Update User Description
-            lifecycleScope.launch {
-                updateUserDescription(userDescriptionEditText.text?.toString() ?: "")
-            }
+            updateUserDescription(userDescriptionEditText.text?.toString() ?: "")
         }
         // Logout Button Listener
         logoutButton.setOnClickListener {
@@ -55,40 +53,22 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun getUserProfile() {
+    private fun getUserProfile() {
         progressBar.visibility = VISIBLE
         // Retrieve the Twitch User Profile using the API
         try {
-            userRepository.getUser()?.let { user ->
-                // Success :)
-                // Update the UI with the user data
-                setUserInfo(user)
-            } ?: run {
-                // Error :(
-                showError(getString(R.string.error_profile))
-            }
-            // Hide Loading
-            progressBar.visibility = GONE
+            viewModel.getUser()
         } catch (t: UnauthorizedException) {
             onUnauthorized()
         }
     }
 
 
-    private suspend fun updateUserDescription(description: String) {
+    private fun updateUserDescription(description: String) {
         progressBar.visibility = VISIBLE
         // Update the Twitch User Description using the API
         try {
-            userRepository.updateUser(description)?.let { user ->
-                // Success :)
-                // Update the UI with the user data
-                setUserInfo(user)
-            } ?: run {
-                // Error :(
-                showError(getString(R.string.error_profile))
-            }
-            // Hide Loading
-            progressBar.visibility = GONE
+            viewModel.updateUser(description)
         } catch (t: UnauthorizedException) {
             onUnauthorized()
         }
@@ -112,10 +92,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun logout() {
         // Clear local session data
-        val oAuthRepository : OAuthAuthenticationRepository = get()
-        lifecycleScope.launch {
-            oAuthRepository.logout()
-        }
+        viewModel.logOut()
         // Close this and all parent activities
         finishAffinity()
         // Open Login
@@ -124,8 +101,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun onUnauthorized() {
         // Clear local access token
-        val sessionManager : SessionManager = get()
-        sessionManager.clearAccessToken()
+        viewModel.clearAccessToken()
         // User was logged out, close screen and all parent screens and open login
         finishAffinity()
         startActivity(Intent(this, LoginActivity::class.java))

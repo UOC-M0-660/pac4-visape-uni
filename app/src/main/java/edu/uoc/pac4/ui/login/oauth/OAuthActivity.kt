@@ -10,27 +10,43 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
 import edu.uoc.pac4.ui.LaunchActivity
 import edu.uoc.pac4.R
-import edu.uoc.pac4.data.SessionManager
 import edu.uoc.pac4.data.network.Endpoints
-import edu.uoc.pac4.data.network.Network
-import edu.uoc.pac4.data.oauth.AuthenticationRepository
-import edu.uoc.pac4.data.oauth.OAuthAuthenticationRepository
 import edu.uoc.pac4.data.oauth.OAuthConstants
-import edu.uoc.pac4.data.oauth.OAuthDataSource
 import kotlinx.android.synthetic.main.activity_oauth.*
-import kotlinx.coroutines.launch
-import org.koin.android.ext.android.get
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class OAuthActivity : AppCompatActivity() {
 
     private val TAG = "StreamsActivity"
+    private val viewModel: OAuthViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_oauth)
+        viewModel.isLogged.observe(this, Observer {
+            if (it) {
+                progressBar.visibility = View.GONE
+
+                // Restart app to navigate to StreamsActivity
+                startActivity(Intent(this@OAuthActivity, LaunchActivity::class.java))
+                finish()
+            } else {
+                // Failure :(
+
+                // Show Error Message
+                Toast.makeText(
+                    this@OAuthActivity,
+                    getString(R.string.error_oauth),
+                    Toast.LENGTH_LONG
+                ).show()
+                // Restart Activity
+                finish()
+                startActivity(Intent(this@OAuthActivity, OAuthActivity::class.java))
+            }
+        })
         launchOAuthAuthorization()
     }
 
@@ -95,28 +111,6 @@ class OAuthActivity : AppCompatActivity() {
         // Show Loading Indicator
         progressBar.visibility = View.VISIBLE
 
-        val oAuthRepository : AuthenticationRepository = get()
-
-        lifecycleScope.launch {
-            if (oAuthRepository.login(authorizationCode)) {
-                progressBar.visibility = View.GONE
-
-                // Restart app to navigate to StreamsActivity
-                startActivity(Intent(this@OAuthActivity, LaunchActivity::class.java))
-                finish()
-            } else {
-                // Failure :(
-
-                // Show Error Message
-                Toast.makeText(
-                    this@OAuthActivity,
-                    getString(R.string.error_oauth),
-                    Toast.LENGTH_LONG
-                ).show()
-                // Restart Activity
-                finish()
-                startActivity(Intent(this@OAuthActivity, OAuthActivity::class.java))
-            }
-        }
+        viewModel.login(authorizationCode)
     }
 }

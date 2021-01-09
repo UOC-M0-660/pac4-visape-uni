@@ -7,19 +7,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import edu.uoc.pac4.R
-import edu.uoc.pac4.data.SessionManager
-import edu.uoc.pac4.data.network.Network
 import edu.uoc.pac4.data.network.UnauthorizedException
-import edu.uoc.pac4.data.streams.StreamsRepository
 import edu.uoc.pac4.ui.login.LoginActivity
 import edu.uoc.pac4.ui.profile.ProfileActivity
 import kotlinx.android.synthetic.main.activity_streams.*
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
-import org.koin.android.ext.android.get
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class StreamsActivity : AppCompatActivity() {
 
@@ -28,11 +25,41 @@ class StreamsActivity : AppCompatActivity() {
     private val adapter = StreamsAdapter()
     private val layoutManager = LinearLayoutManager(this)
 
-    private val streamsRepository : StreamsRepository by inject()
+    private val viewModel: StreamsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_streams)
+
+        viewModel.streams.observe(this, Observer {
+            // Success :)
+            val streams = it.second.orEmpty()
+            if (!streams.isEmpty()) {
+                // Update UI with Streams
+                if (nextCursor != null) {
+                    // We are adding more items to the list
+                    adapter.submitList(adapter.currentList.plus(streams))
+                } else {
+                    // It's the first n items, no pagination yet
+                    adapter.submitList(streams)
+                }
+                // Save cursor for next request
+                nextCursor = it.first
+            } else {
+                // Show Error message to not leave the page empty
+                if (adapter.currentList.isNullOrEmpty()) {
+                    Toast.makeText(
+                        this@StreamsActivity,
+                        getString(R.string.error_streams), Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            // Hide Loading
+            swipeRefreshLayout.isRefreshing = false
+        })
+
+
         // Init RecyclerView
         initRecyclerView()
         // Swipe to Refresh Listener
@@ -74,40 +101,12 @@ class StreamsActivity : AppCompatActivity() {
         // Get Twitch Streams
         lifecycleScope.launch {
             try {
-                streamsRepository.getStreams(cursor).let { response ->
-                    // Success :)
-                    Log.d("StreamsActivity", "Got Streams: $response")
-                    val streams = response.second.orEmpty()
-                    // Update UI with Streams
-                    if (cursor != null) {
-                        // We are adding more items to the list
-                        adapter.submitList(adapter.currentList.plus(streams))
-                    } else {
-                        // It's the first n items, no pagination yet
-                        adapter.submitList(streams)
-                    }
-                    // Save cursor for next request
-                    nextCursor = response.first
-
-                } ?: run {
-                    // Error :(
-
-                    // Show Error message to not leave the page empty
-                    if (adapter.currentList.isNullOrEmpty()) {
-                        Toast.makeText(
-                            this@StreamsActivity,
-                            getString(R.string.error_streams), Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                // Hide Loading
-                swipeRefreshLayout.isRefreshing = false
+                viewModel.getStreams(cursor)
 
             } catch (t: UnauthorizedException) {
                 Log.w(TAG, "Unauthorized Error getting streams", t)
                 // Clear local access token
-                val sessionManager: SessionManager = get()
-                sessionManager.clearAccessToken()
+                viewModel.clearAccessToken()
                 // User was logged out, close screen and open login
                 finish()
                 startActivity(Intent(this@StreamsActivity, LoginActivity::class.java))

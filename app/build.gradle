@@ -69,4 +69,5 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+    
 }
