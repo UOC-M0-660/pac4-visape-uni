@@ -22,7 +22,7 @@ import org.koin.dsl.module
  */
 
 val dataModule = module {
-    single { Network.createHttpClient(androidContext())}
+    factory { Network.createHttpClient(androidContext())}
 
     //Streams
     single { StreamsDataSource(get())}
