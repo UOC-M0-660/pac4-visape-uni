@@ -32,7 +32,7 @@ class OAuthAuthenticationRepository(
 
             sessionManager.saveAccessToken(response.accessToken)
             response.refreshToken?.let {
-                sessionManager.saveAccessToken(it)
+                sessionManager.saveRefreshToken(it)
             }
             return true
         } ?: run {
