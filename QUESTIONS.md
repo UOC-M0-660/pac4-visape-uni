@@ -38,7 +38,7 @@ Hay que tener en cuenta lo que pasa con el Presenter una vez se destruye la Acti
 #### MVI
 
 ##### ¿En qué consiste esta arquitectura?
-Model-View-Intent es un nuevo patrón de arquitectura para Android. Los roles de los componentes de esta arquitectura són los siguientes:
+Model-View-Intent es un nuevo patrón de arquitectura para Android. Los roles de los componentes de esta arquitectura son los siguientes:
 - Model: Representa un estado. Los modelos deben ser inmutables para asegurar una direccionalidad del flujo de datos entre ellos y las otras capas de la arquitectura.
 - Intent: Representa una intención o deseo de realizar una acción por el usuario. Para cada acción de un usuario, un Intent será recibido por la View, el Presenter lo observará y se traducirá a un nuevo estado del Model.
 - View: Són representados por las Interfaces como en el patrón MVP. Se implementa con Activities o Fragments.
@@ -46,7 +46,7 @@ Model-View-Intent es un nuevo patrón de arquitectura para Android. Los roles de
 ##### ¿Cuáles son sus ventajas?
 Una de las principales ventajas es unidireccionalidad y un flujo cíclico de los datos de la aplicación.
 Otra ventaja es que proporciona un estado consistente durante el ciclo de vida de las vistas.
-Por último, la inmutabilidad de los Modelos proporciona un comportamento seguro en aplicaciones grandes.
+Por último, la inmutabilidad de los Modelos proporciona un comportamiento seguro en aplicaciones grandes.
 
 
 ##### ¿Qué inconvenientes tiene?
@@ -57,22 +57,22 @@ El mayor y seguramente el único inconveniente del patrón MVI es la curva de ap
 ### Testing
 
 #### ¿Qué tipo de tests se deberían incluir en cada parte de la pirámide de test? Pon ejemplos de librerías de testing para cada una de las partes. 
-Los principales tests que se deberían incluir en un aplicación són:
-1. Tests unitarios: Forman parte de la base de la pirámide. Són pruebas a nivel más inferior de la aplicación que validan el comportamiento de un elemento en concreto de la app, predefiniendo las dependencias previamente para que no afecten al comportamiento de los tests. Estos tests se ejecutan independientemente del emulador o del dispositivo físico. Las herramientas más usadas para estos tests són JUnit y Mockito.
-1. Pruebas de intregración: Situadas en el centro de la pirámide. Són pruebas a nivel medio que permiten testear como interactuan diferentes partes de la aplicación que tienen relación entre ellas. Se realizan una vez se han pasado todos los tests unitarios. La herramienta más común para los tests de integración és Roboelectric, que permite ejecutar los tests en un entorno de pruebas.
-1. Pruebas de interfície de usuario (end to end): Situadas en la parte superior de la pirámide. Són los tests largos pero que menos cantidad hay. Són pruebas que validan toda una funcionalidad que realizaria un usuario en un uso de real de la aplicación. Se realizan en un emulador o en un dispositivo físico. Las herramientas más comunes són Expresso y UI Automator.
+Los principales tests que se deberían incluir en un aplicación son:
+1. Tests unitarios: Forman parte de la base de la pirámide. Són pruebas a nivel más inferior de la aplicación que valida el comportamiento de un elemento en concreto de la app, predefiniendo las dependencias previamente para que no afecten al comportamiento de los tests. Estos tests se ejecutan independientemente del emulador o del dispositivo físico. Las herramientas más usadas para estos tests son JUnit y Mockito.
+1. Pruebas de intregración: Situadas en el centro de la pirámide. Són pruebas a nivel medio que permiten testear como interactúan diferentes partes de la aplicación que tienen relación entre ellas. Se realizan una vez se han pasado todos los tests unitarios. La herramienta más común para los tests de integración és Roboelectric, que permite ejecutar los tests en un entorno de pruebas.
+1. Pruebas de interfície de usuario (end to end): Situadas en la parte superior de la pirámide. Són los tests largos pero que menos cantidad hay. Són pruebas que validan toda una funcionalidad que realizaría un usuario en un uso de real de la aplicación. Se realizan en un emulador o en un dispositivo físico. Las herramientas más comunes son Expresso y UI Automator.
 
 La cantidad de pruebas suele variar en los casos prácticos, pero lo recomendable és realizar un 70% de pruebas unitarias, 20% de pruebas de integración y 10% de pruebas end to end.
 
 #### ¿Por qué los desarrolladores deben centrarse sobre todo en los Unido Tests?
-Són los tests más rápidos y menos costosos de realizar, no necesitan un emulador ni un dispositivo físico para ejecutarse. Además, se centran en un solo componente de la aplicación y no tiene dependencias de interacciones con otros elementos, lo que hace más fácil resolver cualquien error que se encuentre en los tests.
+Són los tests más rápidos y menos costosos de realizar, no necesitan un emulador ni un dispositivo físico para ejecutarse. Además, se centran en un solo componente de la aplicación y no tiene dependencias de interacciones con otros elementos, lo que hace más fácil resolver cualquier error que se encuentre en los tests.
 
 ---
 
 ### Inyección de dependencias
 
 #### Explica en qué consiste y por qué nos ayuda a mejorar nuestro código.
-La inyección de dependencias consiste passar desde una fuente exterior lo objetos de los que depende otro objeto, en vez de crear el objeto en la clase directamente. La inyección de dependencias permite asegurar la reusabilidad de las clases, ya que permite crear dos instancias de la misma clase pero que tengan diferentes objetos de manera sencilla. Además, facilita la realización de tests unitarios que solo testean una clase en concreto sin tener que depender de las otras, haciendo uso de "Mock objects".
+La inyección de dependencias consiste pasar desde una fuente exterior lo objetos de los que depende otro objeto, en vez de crear el objeto en la clase directamente. La inyección de dependencias permite asegurar la reusabilidad de las clases, ya que permite crear dos instancias de la misma clase pero que tengan diferentes objetos de manera sencilla. Además, facilita la realización de tests unitarios que solo testean una clase en concreto sin tener que depender de las otras, haciendo uso de "Mock objects".
 
 #### Explica cómo se hace para aplicar inyección de dependencias de forma manual a un proyecto (sin utilizar librerías externas).
-Para aplicar inyección de dependencias de forma manual, cuando se programa una clase en vez de crear un bloque init() donde se inicializan los objectos, se deberian passar dichos objectos en el constructor como parámetros.
+Para aplicar inyección de dependencias de forma manual, cuando se programa una clase en vez de crear un bloque init() donde se inicializan los objetos, se deberían pasar dichos objetos en el constructor como parámetros.

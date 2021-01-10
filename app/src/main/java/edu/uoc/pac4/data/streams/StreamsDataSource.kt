@@ -12,11 +12,10 @@ class StreamsDataSource(private val httpClient: HttpClient) {
 
     suspend fun getStreams(cursor: String? = null): StreamsResponse? {
         try {
-            val response = httpClient
+            return httpClient
                 .get<StreamsResponse>(Endpoints.streamsUrl) {
                     cursor?.let { parameter("after", it) }
                 }
-            return response
         } catch (t: Throwable) {
             Log.w(TAG, "Error getting streams", t)
             // Try to handle error

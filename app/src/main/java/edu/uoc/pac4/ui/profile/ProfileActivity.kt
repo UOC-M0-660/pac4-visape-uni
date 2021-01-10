@@ -21,15 +21,13 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class ProfileActivity : AppCompatActivity() {
 
-    private val TAG = "ProfileActivity"
-
     private val viewModel : ProfileViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        viewModel.user.observe(this, Observer {
+        viewModel.user.observe(this, {
             setUserInfo(it)
 
             // Hide Loading
@@ -105,10 +103,6 @@ class ProfileActivity : AppCompatActivity() {
         // User was logged out, close screen and all parent screens and open login
         finishAffinity()
         startActivity(Intent(this, LoginActivity::class.java))
-    }
-
-    private fun showError(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
     // Override Action Bar Home button to just finish the Activity

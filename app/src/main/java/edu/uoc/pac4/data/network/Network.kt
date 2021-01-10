@@ -58,7 +58,6 @@ object Network {
                 getToken = {
                     val accessToken = SessionManager(context).getAccessToken() ?: ""
 
-                    Log.d(TAG, "PRUEBA!!!: $accessToken")
                     Log.d(TAG, "Adding Bearer header with token $accessToken")
                     accessToken
                 }

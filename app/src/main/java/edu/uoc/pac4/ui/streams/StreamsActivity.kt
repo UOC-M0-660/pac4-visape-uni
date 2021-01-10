@@ -31,10 +31,10 @@ class StreamsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_streams)
 
-        viewModel.streams.observe(this, Observer {
+        viewModel.streams.observe(this, {
             // Success :)
-            val streams = it.second.orEmpty()
-            if (!streams.isEmpty()) {
+            val streams = it.second
+            if (streams.isNotEmpty()) {
                 // Update UI with Streams
                 if (nextCursor != null) {
                     // We are adding more items to the list
