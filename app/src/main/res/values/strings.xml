@@ -20,6 +20,7 @@
 
     <string name="error_oauth">Login with Twitch Failed</string>
     <string name="error_streams">Error getting Streams</string>
-    <string name="error_profile">Error getting Profile</string>
-    <string name="error_profile_update">Error updating profile</string>
+    <string name="profile_picture_description">Profile picture</string>
+    <string name="eye_icon">Eye icon</string>
+    <string name="stream_image">stream image</string>
 </resources>

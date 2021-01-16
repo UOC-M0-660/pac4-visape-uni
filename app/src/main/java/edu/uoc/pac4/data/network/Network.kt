@@ -57,6 +57,7 @@ object Network {
             install(OAuthFeature) {
                 getToken = {
                     val accessToken = SessionManager(context).getAccessToken() ?: ""
+
                     Log.d(TAG, "Adding Bearer header with token $accessToken")
                     accessToken
                 }

@@ -13,4 +13,6 @@ interface AuthenticationRepository {
 
     suspend fun logout()
 
+    suspend fun clearAccessToken()
+
 }
